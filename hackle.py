@@ -9,6 +9,7 @@ class Hackle:
 
     def run(self):
         self.printHeader()
+        # print(self.sortRemaining(self.remaining)[:100])
         won = False
         while not won:
             self.playTurn()
@@ -28,6 +29,7 @@ class Hackle:
         alph = "abcdefghijklmnopqrstuvwxyz"
         freq = {}
         scores = {}
+        
         for a in alph:
             freq[a] = [0,0,0,0,0]
         # within remaining words, what is the frequency of each character at each index 0-4
@@ -44,8 +46,8 @@ class Hackle:
                 # print("letter/i/freq_of_letter = ", c, "/", i, "/", freq[c][i])
                 score += freq[c][i]
             scores[word] = score
-
         def findScore(word):
+            # print("word/score = ", word, "/", scores[word])
             # print("word/score = ", word, "/", scores[word])
             return scores[word]
         remaining = sorted(remaining, key=findScore, reverse=True)
@@ -83,21 +85,17 @@ class Hackle:
     
     def playTurn(self):
         print("\n   ` Guess a word, then ....")
-        green = input("      ` What's revealed? (Green letters) ..... ").lower()
-        yellow = input("      ` What's revealed? (Yellow letters) .... ").lower()
-        elim = input("      ` What's eliminated? (Grey letters) .... ").lower()
+        green = input("      ` GREEN:    ").lower()
+        yellow = input("      ` YELLOW:   ").lower()
+        elim = input("      ` GRAY:     ").lower()
         for c in elim:
             elim = elim.replace(c, '') if c in green else elim
-               
+            
         green = green if green else "-----"
         yellow = yellow if yellow else "-----"
         elim = elim if elim else ""
         self.updateRemaining(green, yellow, elim)
         self.printRemaining()
-    
-    # def ifIGuess(self, guess, remaining):
-    #     # return length of resulting hypothetical possibilities
-    #     return 100
 
     def updateRemaining(self, green, yellow, elim):
         updated = self.getRemaining(green, yellow, elim)
