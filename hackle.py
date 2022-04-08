@@ -3,9 +3,9 @@ import json
 class Hackle:
     def __init__(self):
         self.remaining = self.buildDict()
-        self.green = "_____"
-        self.yellow = "_____"
-        self.eliminated = ""
+        # self.green = "_____"
+        # self.yellow = "_____"
+        # self.eliminated = ""
 
     def run(self):
         self.printHeader()
@@ -36,7 +36,6 @@ class Hackle:
                 # print("word/i/word[i] = ", word, "/", i, "/", word[i])
                 c = word[i]
                 freq[c][i] += 1
-        print("freq = ", freq)
         # for each word, how many green letters could potentially be revealed?
         for word in remaining:
             # print("word = ", word)
@@ -49,10 +48,10 @@ class Hackle:
         def findScore(word):
             # print("word/score = ", word, "/", scores[word])
             return scores[word]
-        remaining = sorted(remaining, key=findScore)
+        remaining = sorted(remaining, key=findScore, reverse=True)
         return remaining
 
-    def showRemaining(self, green, yellow, elim):
+    def getRemaining(self, green, yellow, elim):
         remaining = []
         # validate each word
         for word in self.remaining:
@@ -90,10 +89,10 @@ class Hackle:
         for c in elim:
             elim = elim.replace(c, '') if c in green else elim
                
-        self.green = green if green else "_____"
-        self.yellow = yellow if yellow else "_____"
-        self.eliminated = elim if elim else ""
-        self.updateRemaining(self.green, self.yellow, self.eliminated)
+        green = green if green else "-----"
+        yellow = yellow if yellow else "-----"
+        elim = elim if elim else ""
+        self.updateRemaining(green, yellow, elim)
         self.printRemaining()
     
     # def ifIGuess(self, guess, remaining):
@@ -101,33 +100,7 @@ class Hackle:
     #     return 100
 
     def updateRemaining(self, green, yellow, elim):
-        updated = self.showRemaining(green, yellow, elim)
-        # validate each word
-        # for word in self.remaining:
-        #     valid = True
-        #     for i, c in enumerate(word):
-        #         g = self.green[i]
-        #         y = self.yellow[i]
-        #         # eliminated letters
-        #         if c in self.eliminated:
-        #             valid = False
-        #             break
-        #         # match green
-        #         if g.isalpha() and g!=c:
-        #             valid = False
-        #             break
-        #         # yellow check 1
-        #         elif c==y:
-        #             valid = False
-        #             break
-        #     # yellow check 2
-        #     for h in self.yellow:
-        #         if h.isalpha() and h not in word:
-        #             valid = False
-        #             break
-        #     # append valid words to updated list
-        #     if valid:
-        #         updated.append(word)
+        updated = self.getRemaining(green, yellow, elim)
         updated = self.sortRemaining(updated)
         self.remaining = updated
 
